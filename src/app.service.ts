@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
+// Aqui la logica general en proyectos pequeños, para grandes mejor dividirlos en modulos
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Aqui la logica general en proyectos pequeños, para grandes mejor dividirlos en modulos!';
+    return '🚀 App corriendo';
   }
 }
