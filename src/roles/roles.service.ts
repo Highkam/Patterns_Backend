@@ -1,30 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { CreateRoleDto, UpdateRoleDto } from './roles.dto';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class RolesService {
-  constructor(private prisma: PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
-  create(createRoleDto: CreateRoleDto) {
-    return 'This action adds a new role';
+  create(data: CreateRoleDto): Promise<Role> {
+    return this.prisma.role.create({
+      data: {
+        name: data.name,
+        permissions: {
+          set: data.permissions,
+        },
+      },
+    });
   }
 
-  findAll() {
+  update(id: number, data: CreateRoleDto): Promise<Role> {
+    return this.prisma.role.update({
+      where: { id },
+      data,
+    });
+  }
+
+  delete(id: number): Promise<Role> {
+    return this.prisma.role.delete({
+      where: { id },
+    });
+  }
+
+  findAll(): Promise<Role[]> {
     return this.prisma.role.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
-  }
-
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  findOne(id: number): Promise<Role | null> {
+    return this.prisma.role.findUnique({
+      where: { id },
+    });
   }
 }
