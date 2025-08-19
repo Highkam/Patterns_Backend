@@ -13,7 +13,7 @@ export class UsersService {
   }
 
   findAll() {
-    return this.prisma.user.findMany();;
+    return this.prisma.user.findMany();
   }
 
   findOne(id: number) {

@@ -30,18 +30,10 @@ model User{
 model Role{
   id          Int         @id @default(autoincrement())
   name        String      @unique
+  permissions String[]
 
   userRoles   User_Role[]
-  rolePermission Role_Permission[]
   @@map("roles")
-}
-
-model Permission{
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-
-  rolePermission Role_Permission[]
-  @@map("permissions")
 }
 
 //  Relations_______________________________________________________
@@ -52,13 +44,4 @@ model User_Role {
   user        User      @relation(fields: [userId], references: [id])
   role        Role      @relation(fields: [roleId], references: [id])
   @@id([userId,roleId])
-}
-
-model Role_Permission {
-  roleId        Int
-  PermissionId  Int
-
-  role        Role        @relation(fields: [roleId], references: [id])
-  permission  Permission  @relation(fields: [PermissionId], references: [id])
-  @@id([roleId,PermissionId])
 }
