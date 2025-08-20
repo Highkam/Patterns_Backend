@@ -22,6 +22,10 @@ export class CreateUserDto {
   lastname?: string;
 
   @IsOptional()
+  @IsString({each: true})
+  roles?: string[]; 
+
+  @IsOptional()
   @IsEnum(State)
-  state?: State; // Prisma ya tiene default ACTIVE si no lo envías
+  state?: State; 
 }

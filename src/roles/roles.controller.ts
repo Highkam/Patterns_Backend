@@ -1,33 +1,37 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { RolesService } from './roles.service';
+import { RolesService, IRolesService, RolesServiceWithPermission } from './roles.service';
 import { CreateRoleDto, UpdateRoleDto } from './roles.dto';
 
 @Controller('roles')
 export class RolesController {
-  constructor(private readonly rolesService: RolesService) {}
+  private readonly service: IRolesService;
+  constructor(rolesService: RolesService) {
+    const currentUserRole = 'user'; // Esto debería venir de la sesión del usuario
+    this.service = new RolesServiceWithPermission(rolesService, currentUserRole);
+  }
 
   @Post()
-  async create(@Body() data: CreateRoleDto) {
-    return this.rolesService.create(data);
+  create(@Body() data: CreateRoleDto) {
+    return this.service.create(data);
   }
 
   @Get()
   findAll() {
-    return this.rolesService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.rolesService.findOne(+id);
+    return this.service.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: number, @Body() data: CreateRoleDto) {
-    return this.rolesService.update(+id, data);
+    return this.service.update(+id, data);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.rolesService.delete(+id);
+    return this.service.delete(+id);
   }
 }
