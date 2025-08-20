@@ -1,24 +1,18 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { LoginDto } from '../users/dto/login.dto';
+import { AuthValidatorFactory } from './factory/auth.factory';
 import { AuthService } from './auth.service';
-import { ValidadorPorEmail, ValidadorPorUsername } from './bridges/auth.bridge';
-import { LoginDto } from '../users/dto/login.dto'; // 👈 importa este
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly factory: AuthValidatorFactory) {}
 
-  @Post('login-email')
+  @Post('login')
   @HttpCode(200)
-  async loginEmail(@Body() dto: LoginDto) {
-    const auth = new AuthService(new ValidadorPorEmail(this.prisma));
-    return auth.login(dto.identificador, dto.password);
-  }
-
-  @Post('login-username')
-  @HttpCode(200)
-  async loginUsername(@Body() dto: LoginDto) {
-    const auth = new AuthService(new ValidadorPorUsername(this.prisma));
+  async login(@Body() dto: LoginDto) {
+    const mode = dto.mode ?? this.factory.inferMode(dto.identificador);
+    const validator = this.factory.create(mode);
+    const auth = new AuthService(validator); // Bridge: inyectamos el Implementor
     return auth.login(dto.identificador, dto.password);
   }
 }

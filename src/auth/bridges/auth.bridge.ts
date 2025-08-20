@@ -1,23 +1,24 @@
-// src/auth/bridges/auth.bridge.ts
 import { PrismaService } from '../../prisma/prisma.service';
+import { User } from '@prisma/client';
 
 export interface ValidadorSesion {
-  validar(identificador: string, password: string): Promise<boolean>;
+  validar(identificador: string, password: string): Promise<User | null>;
 }
 
 export class ValidadorPorEmail implements ValidadorSesion {
   constructor(private prisma: PrismaService) {}
-  async validar(email: string, password: string): Promise<boolean> {
+  async validar(email: string, password: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { email } });
-    // si quieres bloquear inactivos, descomenta la línea del state
-    return !!user && user.password === password /* && user.state === 'ACTIVE' */;
+    if (!user || user.password !== password) return null;
+    return user;
   }
 }
 
 export class ValidadorPorUsername implements ValidadorSesion {
   constructor(private prisma: PrismaService) {}
-  async validar(username: string, password: string): Promise<boolean> {
+  async validar(username: string, password: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { username } });
-    return !!user && user.password === password /* && user.state === 'ACTIVE' */;
+    if (!user || user.password !== password) return null;
+    return user;
   }
 }
