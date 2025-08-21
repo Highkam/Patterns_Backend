@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from '../users/dto/login.dto';
 import { AuthValidatorFactory } from './factory/auth.factory';
 import { AuthService } from './auth.service';
@@ -18,5 +18,17 @@ export class AuthController {
 
     guardarSesion(user); // guardamos la sesión
     return user;
+  }
+
+ @Post('logout')
+  @HttpCode(200)
+  async logout(@Body('id') id: number) {
+    const userId = Number(id);
+    if (!id || Number.isNaN(userId)) {
+      throw new UnauthorizedException('Falta el id o es inválido');
+    }
+
+    const auth = new AuthService();
+    return auth.logout(userId);
   }
 }

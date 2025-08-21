@@ -11,3 +11,7 @@ export function guardarSesion(user: { id: number; email: string; roleId: number 
 export function obtenerSesion(id: number) {
   return sesiones.get(id);
 }
+
+export function eliminarSesion(id: number) {
+  sesiones.delete(id);
+}
