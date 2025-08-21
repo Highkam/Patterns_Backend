@@ -28,7 +28,4 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(State)
   state?: State; 
-
-  @IsOptional()
-  roleId?: number;
 }
