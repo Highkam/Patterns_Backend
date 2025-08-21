@@ -8,8 +8,19 @@ import { Prisma, User } from '@prisma/client';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({ data });
+  async create(data: CreateUserDto): Promise<{ message: string; user: User }> {
+    try {
+      const user = await this.prisma.user.create({ data });
+      return {
+        message: 'User created successfully',
+        user,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+        throw new ConflictException('Username or email already exists');
+      }
+      throw e;
+    }
   }
 
   findAll(): Promise<User[]> {
@@ -21,6 +32,22 @@ export class UsersService {
       where: { id }, 
     });
     if (!user) throw new NotFoundException(`User ${id} not found`);
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    if (!user) throw new NotFoundException(`User with email ${email} not found`);
+    return user;
+  }
+
+  async findByUsername(username: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+    });
+    if (!user) throw new NotFoundException(`User with username ${username} not found`);
     return user;
   }
 
