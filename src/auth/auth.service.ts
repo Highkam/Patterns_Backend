@@ -7,14 +7,17 @@ export class AuthService {
   constructor(private readonly validador: ValidadorSesion) {}
 
   async login(identificador: string, password: string) {
-    const user: User | null = await this.validador.validar(
-      identificador,
-      password,
-    );
+    const user: User | null = await this.validador.validar(identificador, password);
     if (!user) throw new UnauthorizedException('Credenciales inválidas');
 
     const state = getUserState(user);
     state.ensureCanLogin(user);
-    return { mensaje: '✅ Sesión iniciada' };
+
+    return {
+      mensaje: '✅ Sesión iniciada',
+      id: user.id,
+      email: user.email,
+      roleId: user.roleId,
+    };
   }
 }

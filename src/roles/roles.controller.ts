@@ -3,7 +3,7 @@ import { RolesService} from './roles.service';
 import { CreateRoleDto} from './roles.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
-@Roles('admin')
+@Roles(1)
 @Controller('roles') 
 export class RolesController { 
   constructor(private readonly rolesService: RolesService) {} 

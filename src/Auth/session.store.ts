@@ -1,7 +1,7 @@
-const sesiones = new Map<number, { id: number; email: string; role: string }>();
+const sesiones = new Map<number, { id: number; email: string; roleId: number }>();
 
-export function guardarSesion(user: any) {
-  sesiones.set(user.id, { id: user.id, email: user.email, role: user.Role.name });
+export function guardarSesion(user: { id: number; email: string; roleId: number }) {
+  sesiones.set(user.id, { id: user.id, email: user.email, roleId: user.roleId });
 }
 
 export function obtenerSesion(id: number) {
