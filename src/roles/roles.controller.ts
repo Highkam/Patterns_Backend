@@ -1,37 +1,35 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { RolesService, IRolesService, RolesServiceWithPermission } from './roles.service';
-import { CreateRoleDto, UpdateRoleDto } from './roles.dto';
+import { RolesService} from './roles.service';
+import { CreateRoleDto} from './roles.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
-@Controller('roles')
-export class RolesController {
-  private readonly service: IRolesService;
-  constructor(rolesService: RolesService) {
-    const currentUserRole = 'user'; // Esto debería venir de la sesión del usuario
-    this.service = new RolesServiceWithPermission(rolesService, currentUserRole);
-  }
+@Roles('admin')
+@Controller('roles') 
+export class RolesController { 
+  constructor(private readonly rolesService: RolesService) {} 
 
-  @Post()
-  create(@Body() data: CreateRoleDto) {
-    return this.service.create(data);
-  }
+  @Post() 
+  async create(@Body() data: CreateRoleDto) { 
+    return this.rolesService.create(data); 
+  } 
 
-  @Get()
-  findAll() {
-    return this.service.findAll();
-  }
+  @Get() 
+  findAll() { 
+    return this.rolesService.findAll(); 
+  } 
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.service.findOne(+id);
-  }
+  @Get(':id') 
+  findOne(@Param('id') id: number) { 
+    return this.rolesService.findOne(+id); 
+  } 
 
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() data: CreateRoleDto) {
-    return this.service.update(+id, data);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.delete(+id);
-  }
+  @Patch(':id') 
+  update(@Param('id') id: number, @Body() data: CreateRoleDto) { 
+    return this.rolesService.update(+id, data); 
+  } 
+  
+  @Delete(':id') 
+  remove(@Param('id') id: string) { 
+    return this.rolesService.delete(+id); 
+  } 
 }

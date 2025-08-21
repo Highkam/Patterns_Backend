@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsNotEmpty, IsOptional } from "class-validator"
+import { IsString, IsNotEmpty, IsOptional, IsBoolean } from "class-validator"
 
 export class CreateRoleDto {
     @IsNotEmpty()
@@ -7,8 +7,8 @@ export class CreateRoleDto {
     name: string
 
     @IsOptional()
-    @IsString({each: true})
-    permissions: string[]
+    @IsBoolean()
+    permission_enabled: boolean
 }
 
 export class UpdateRoleDto extends PartialType(CreateRoleDto) {}
