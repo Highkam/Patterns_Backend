@@ -3,45 +3,31 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+}
+
+model Role {
+  id                 Int      @id(map: "roles_pkey") @default(autoincrement())
+  name               String   @unique(map: "roles_name_key")
+  permission_enabled Boolean? @default(false)
+  User               User[]
+}
+
+model User {
+  id        Int     @id(map: "users_pkey") @default(autoincrement())
+  username  String  @unique(map: "users_username_key")
+  password  String
+  email     String  @unique(map: "users_email_key")
+  firstname String?
+  lastname  String?
+  state     State   @default(ACTIVE)
+  roleId    Int     @default(1)
+  Role      Role    @relation(fields: [roleId], references: [id], onDelete: SetDefault)
 }
 
 enum State {
   ACTIVE
   INACTIVE
-}
-
-// Entities________________________________________________________
-model User{
-  id          Int         @id @default(autoincrement())
-  username    String      @unique
-  password    String
-  email       String      @unique
-  firstname   String?
-  lastname    String?
-  state       State       @default(ACTIVE)
-
-  userRoles   User_Role[]
-  @@map("users")
-}
-
-model Role{
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  permissions String[]
-
-  userRoles   User_Role[]
-  @@map("roles")
-}
-
-//  Relations_______________________________________________________
-model User_Role {
-  userId      Int
-  roleId      Int
-
-  user        User      @relation(fields: [userId], references: [id])
-  role        Role      @relation(fields: [roleId], references: [id])
-  @@id([userId,roleId])
 }
