@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
 import { State } from '@prisma/client';
 
@@ -24,7 +23,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsNumber()
-  roleId?: number; 
+  roleId?: number;
 
   @IsOptional()
   @IsEnum(State)
