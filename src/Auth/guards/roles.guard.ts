@@ -1,18 +1,16 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { obtenerSesion } from '../session.store';
-import { ROLES_KEY } from '../decorators/roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<number[]>(ROLES_KEY, [
+    const requiredRoles = this.reflector.getAllAndOverride<number[]>('roles', [
       context.getHandler(),
       context.getClass(),
     ]);
-
     if (!requiredRoles) return true;
 
     const request = context.switchToHttp().getRequest();
@@ -23,7 +21,6 @@ export class RolesGuard implements CanActivate {
       throw new UnauthorizedException('❌ No has iniciado sesión');
     }
 
-    // Compara contra roleId
-    return requiredRoles.some((roleId) => roleId === user.roleId);
+    return requiredRoles.includes(user.roleId);
   }
 }
