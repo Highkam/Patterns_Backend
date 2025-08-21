@@ -13,6 +13,12 @@ async function bootstrap() {
       transform: true,              // convierte automáticamente tipos (ej. string a number en @Param)
     }),
   );
+  app.enableCors({
+  origin: ["http://localhost:3000"],
+  credentials: true,
+  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
+});
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
