@@ -1,4 +1,3 @@
-
 import { UnauthorizedException } from '@nestjs/common';
 import type { ValidadorSesion } from './bridges/auth.bridge';
 import { getUserState } from './state/user-state';
@@ -8,13 +7,14 @@ export class AuthService {
   constructor(private readonly validador: ValidadorSesion) {}
 
   async login(identificador: string, password: string) {
-    const user: User | null = await this.validador.validar(identificador, password);
+    const user: User | null = await this.validador.validar(
+      identificador,
+      password,
+    );
     if (!user) throw new UnauthorizedException('Credenciales inválidas');
 
-    // Patrón State: selecciona comportamiento según user.state
     const state = getUserState(user);
-    state.ensureCanLogin(user); 
-
+    state.ensureCanLogin(user);
     return { mensaje: '✅ Sesión iniciada' };
   }
 }

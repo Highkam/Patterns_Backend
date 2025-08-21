@@ -12,11 +12,7 @@ export class RolesGuard implements CanActivate {
     ]);
     if (!requiredRoles) return true;
 
-    const user = {
-      id: 12,
-      email: 'camilo@dev.com',
-      roles: ['admin'],
-    };
+    const user = { id: 12, email: 'camilo@dev.com', roles: ['admin'], };
 
     if (!user || !user.roles) return false;
 

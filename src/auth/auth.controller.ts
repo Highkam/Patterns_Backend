@@ -2,17 +2,16 @@ import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { LoginDto } from '../users/dto/login.dto';
 import { AuthValidatorFactory } from './factory/auth.factory';
 import { AuthService } from './auth.service';
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly factory: AuthValidatorFactory) {}
-
   @Post('login')
   @HttpCode(200)
   async login(@Body() dto: LoginDto) {
     const mode = dto.mode ?? this.factory.inferMode(dto.identificador);
     const validator = this.factory.create(mode);
-    const auth = new AuthService(validator); // Bridge: inyectamos el Implementor
+    const auth = new AuthService(validator);
+    // Bridge: inyectamos el Implementor
     return auth.login(dto.identificador, dto.password);
   }
 }
