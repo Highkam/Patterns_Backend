@@ -33,37 +33,37 @@ export class UsersController {
   }
 
   @Get()
-  @Roles(1)
+  @Roles(2)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get('email/:email')
-  @Roles(1)
+  @Roles(2)
   findByEmail(@Param('email') email: string) {
     return this.usersService.findByEmail(email);
   }
 
   @Get('username/:username')
-  @Roles(1)
+  @Roles(2)
   findByUsername(@Param('username') username: string) {
     return this.usersService.findByUsername(username);
   }
 
   @Get(':id')
-  @Roles(1)
+  @Roles(2)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles(1)
+  @Roles(2)
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserDto) {
     return this.usersService.update(id, dto);
   }
 
   @Delete(':id')
-  @Roles(1)
+  @Roles(2)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(id);
   }
