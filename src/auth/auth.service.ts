@@ -19,7 +19,7 @@ export class AuthService {
     state.ensureCanLogin(user);
 
     return {
-      mensaje: '✅ Sesión iniciada',
+      mensaje: 'Sesión iniciada',
       id: user.id,
       email: user.email,
       roleId: user.roleId,
@@ -29,7 +29,7 @@ export class AuthService {
   async logout(id: number) {
     eliminarSesion(id);
     return {
-      mensaje: '✅ Sesión cerrada',
+      mensaje: 'Sesión cerrada',
     };
   }
 }

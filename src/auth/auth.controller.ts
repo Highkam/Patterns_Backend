@@ -16,7 +16,7 @@ export class AuthController {
     const auth = new AuthService(validator);
     const user = await auth.login(dto.identificador, dto.password);
 
-    guardarSesion(user); // guardamos la sesión
+    guardarSesion(user);
     return user;
   }
 
