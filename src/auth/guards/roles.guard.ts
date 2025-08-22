@@ -18,7 +18,7 @@ export class RolesGuard implements CanActivate {
     const user = obtenerSesion(Number(userId));
 
     if (!user) {
-      throw new UnauthorizedException('❌ No has iniciado sesión');
+      throw new UnauthorizedException('No has iniciado sesión');
     }
 
     return requiredRoles.includes(user.roleId);

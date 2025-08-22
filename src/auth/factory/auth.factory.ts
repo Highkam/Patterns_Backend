@@ -8,7 +8,6 @@ export class AuthValidatorFactory {
   constructor(private readonly prisma: PrismaService) {}
 
   //Determina si el identificador recibido es un email o un username
-  
   inferMode(identificador: string): 'email' | 'username' {
     return identificador.includes('@') ? 'email' : 'username';
   }
